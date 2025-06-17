@@ -64,6 +64,7 @@ Here are the resources I use and recommend while learning machine learning:
 
 ## 📂 Project Structure
 
+   ```
 .
 ├── data
 │   ├── sign_mnist_test
@@ -86,6 +87,7 @@ Here are the resources I use and recommend while learning machine learning:
 └── README.md
 
 7 directories, 13 files
+   ```
 
 ---
 
@@ -101,6 +103,3 @@ Feel free to use, modify, and share the code as part of your learning journey. �
 * 🗓 Created: April 19, 2025
 * 🔄 Last Updated: June 17, 2026
 
-
-如果你需要我生成中英文对照版本，或者直接写入本地文件并推送 GitHub，我也可以继续帮你完成～是否需要我生成 `.md` 文件或进一步美化？
-```
