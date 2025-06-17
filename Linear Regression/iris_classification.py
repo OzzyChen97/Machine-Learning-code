@@ -18,30 +18,37 @@ X_scaled = scaler.fit_transform(X)
 y_onehot = np.zeros((y.size, 3))  # 3 classes
 y_onehot[np.arange(y.size), y] = 1
 
-# 4. Split the dataset into training and test sets
+# 4. Split dataset into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_onehot, test_size=0.3, random_state=42)
 
-# 5. Linear regression fitting: compute weights using the normal equation
-def fit_linear_regression(X, y):
-    # Add bias term
-    X_b = np.c_[np.ones((X.shape[0], 1)), X]
-    # Compute weights using the normal equation: w = (X^T X)^-1 X^T y
-    w = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(y)
+# 5. Gradient Descent implementation for linear regression
+def fit_gradient_descent(X, y, learning_rate=0.01, iterations=1000):
+    m = len(y)  # Number of training samples
+    n = X.shape[1]  # Number of features
+    X_b = np.c_[np.ones((m, 1)), X]  # Add bias term
+    w = np.zeros((n + 1, 3))  # Initialize weights for each class (including bias)
+
+    for _ in range(iterations):
+        for j in range(3):  # 3 classes
+            # Compute predictions
+            y_pred = X_b.dot(w[:, j])
+
+            # Compute the gradient for class j
+            gradient = (1 / m) * X_b.T.dot(y_pred - y[:, j])
+
+            # Update weights for class j
+            w[:, j] = w[:, j] - learning_rate * gradient
+
     return w
 
-# 6. Train multiple models (One-vs-Rest)
-weights = []
-for i in range(3):  # 3 classes
-    model_weights = fit_linear_regression(X_train, y_train[:, i])
-    weights.append(model_weights)
-
-weights = np.array(weights)
+# 6. Train multiple models (One-vs-Rest) using Gradient Descent
+weights = fit_gradient_descent(X_train, y_train, learning_rate=0.01, iterations=1000)
 
 # 7. Prediction: use the model to predict (for each sample, choose the class with the highest score)
 def predict(X, weights):
-    # Add bias term
-    X_b = np.c_[np.ones((X.shape[0], 1)), X]
-    scores = X_b.dot(weights.T)  # Compute scores for each class
+    m = X.shape[0]
+    X_b = np.c_[np.ones((m, 1)), X]  # Add bias term
+    scores = X_b.dot(weights)  # Compute scores for each class
     return np.argmax(scores, axis=1)  # Return the class with the highest score
 
 # 8. Predict and evaluate the model
